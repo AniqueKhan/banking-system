@@ -1,0 +1,97 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row justify-content-center mt-2">
+  <div class="col col-md-8">
+    <h1>My Profile</h1>
+    <div class="card mt-2">
+      <div class="card-body">
+        <h5 class="card-title">Account Name: {{profile.account_name}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          PAN Number: {{profile.account_number}}
+        </h6>
+        <h6 class="card-subtitle mb-2 text-muted">
+          Account Type: {{account.get_account_type_display}}
+        </h6>
+        <p class="card-text">
+          <!-- prettier-ignore -->
+          {% if profile.phone %} <b>Phone</b>: {{profile.phone}}
+          <br /><!-- prettier-ignore -->{% endif %} {% if profile.address %}
+          <b>Address</b>: {{profile.address}} <br />{% endif %}
+
+          <b>Balance</b>: {{account.balance}}$ <br />
+          <b>Bank Branch</b>: {{account.branch}} <br />
+        </p>
+        <button
+          type="button"
+          class="btn btn-outline-primary float-end"
+          data-toggle="modal"
+          data-target="#addBalanceModal"
+        >
+          Add Balance
+        </button>
+        <!-- Add balance modal -->
+        <div
+          class="modal fade"
+          id="addBalanceModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="addBalanceModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addBalanceModalLabel">
+                  Add Balance
+                </h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form
+                  method="post"
+                  id="addBalanceForm"
+                  action="{% url 'add-balance' %}"
+                >
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="amount"
+                      name="amount"
+                      required
+                    />
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  form="addBalanceForm"
+                  class="btn btn-primary"
+                >
+                  Add Balance
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
 
 SELF_EMPLOYED_MARRIAGE_CHOICES = [('yes', 'Yes'),('no', 'No'),]
 GENDER_CHOICES = [('male', 'Male'),('female', 'Female'),]
-PROPERTY_AREA_CHOICES = [('rural', 'Rural'),('urban', 'Urban'),]
+PROPERTY_AREA_CHOICES = [('urban', 'Urban'),('rural', 'Rural'),]
 DEPENDENTS_CHOICES = [(0, '0'),(1, '1'),(2, '2'),(3, '3'),(4, '4'),]
 EDUCATION_CHOICES = [('graduated', 'Graduated'),('not_graduated', 'Not Graduated'),]
 
@@ -35,17 +35,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=100, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    self_employed = models.CharField(max_length=3, choices=SELF_EMPLOYED_MARRIAGE_CHOICES)
-    married = models.CharField(max_length=3, choices=SELF_EMPLOYED_MARRIAGE_CHOICES)
-    gender = models.CharField(max_length=6, choices=GENDER_CHOICES)
-    dependents = models.IntegerField(choices=DEPENDENTS_CHOICES)
-    education = models.CharField(max_length=13, choices=EDUCATION_CHOICES)
+    self_employed = models.CharField(max_length=3, choices=SELF_EMPLOYED_MARRIAGE_CHOICES,default=SELF_EMPLOYED_MARRIAGE_CHOICES[0])
+    married = models.CharField(max_length=3, choices=SELF_EMPLOYED_MARRIAGE_CHOICES,default=SELF_EMPLOYED_MARRIAGE_CHOICES[0])
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES,default=GENDER_CHOICES[0])
+    dependents = models.IntegerField(choices=DEPENDENTS_CHOICES,default=DEPENDENTS_CHOICES[0])
+    education = models.CharField(max_length=13, choices=EDUCATION_CHOICES,default=EDUCATION_CHOICES[0])
     applicant_income = models.FloatField()
     co_applicant_income = models.FloatField(blank=True,null=True)
-    property_area = models.CharField(max_length=5,choices=PROPERTY_AREA_CHOICES,blank=True, null=True)
+    property_area = models.CharField(max_length=5,choices=PROPERTY_AREA_CHOICES,default=PROPERTY_AREA_CHOICES[0])
 
     USERNAME_FIELD = 'account_name'
-    REQUIRED_FIELDS = ['pan_number']
+    REQUIRED_FIELDS = ['pan_number',]
 
     objects = UserManager()
 

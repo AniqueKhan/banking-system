@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row justify-content-center mt-2">
+  <div class="col col-md-8">
+    {% if not notifications %}
+    <h1>You dont have any notifications as of yet.</h1>
+    {% else %}
+
+    <h1>Notifications</h1>
+    {% for notification in notifications %}
+    <div class="card mt-2">
+      <div class="card-body">
+        <h5 class="card-title">{{notification.message}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{notification.date}}</h6>
+        <a
+          class="btn btn-outline-danger float-end"
+          href="{% url 'delete-notification' notification.id %}"
+        >
+          Delete Notification
+        </a>
+      </div>
+    </div>
+
+    {% endfor %}{% endif %}
+  </div>
+</div>
+{% endblock content %}
