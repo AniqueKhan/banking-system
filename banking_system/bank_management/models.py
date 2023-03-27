@@ -1,6 +1,7 @@
 from django.db import models
 from app_authentication.models import User
 from django.db.models.signals import post_save
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Branch(models.Model):
@@ -34,6 +35,16 @@ class Loan(models.Model):
         if self.paid_at:
             return self.created_at - self.paid_at
         return None
+
+    def get_pay_loan_button(self):
+        account = Account.objects.filter(hold_by=self.availed_by).first()
+        total_amount = self.amount + (self.amount * self.interest_rate / 100)
+
+        if not self.paid and account:
+            return account.balance >= total_amount
+        
+        return False
+
 
 
 ACCOUNT_TYPES = (('checking', 'Checking'),('savings', 'Savings'),('money_market', 'Money Market'),('cd', 'Certificate of Deposit'),('credit', 'Credit Card'),('loan', 'Loan'),)
@@ -86,7 +97,7 @@ def create_notification_on_loan_creation(sender, instance, created, **kwargs):
     if created:
         loan = instance
         user = loan.availed_by
-        message = f"You took a loan of amount ${loan.amount} from {loan.branch},{loan.branch.bank}. The due date is {loan.due_at.date()}."
+        message = f"You took a loan of amount ${loan.amount} from {loan.branch}. The due date is {loan.due_at.date()}."
         Notification.objects.create(loan=loan, user=user, message=message)
 post_save.connect(create_notification_on_loan_creation, sender=Loan)
 

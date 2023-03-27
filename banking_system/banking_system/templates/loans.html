@@ -1,9 +1,11 @@
 {% extends 'base.html' %} {% block content %}
 <div class="row justify-content-center mt-2">
   <div class="col col-md-8">
+    {% if not pending_loans and not due_loans and not paid_loans %}
+    <h1 class="mt-4">You dont have any loans as of now</h1>
+    {% else %}
     <h1>My Loans</h1>
-
-    {% if pending_loans %}
+    {% endif %} {% if pending_loans %}
     <h4>Pending Loans</h4>
     {% for loan in pending_loans %}
 
@@ -14,11 +16,10 @@
           Loan Type: {{loan.get_loan_type_display}}
         </h6>
         <p class="card-text">
-          <b>Bank</b>: {{loan.branch.bank}} <br />
-          <b>Bank Branch</b>: {{loan.branch}} <br />
+          <b>Bank Branch</b>: {{loan.branch}} <br /><b>Taken At</b>:
+          {{loan.created_at}} <br />
           <b>Due Date</b>: {{loan.due_at}} <br />
         </p>
-
         {% if loan.get_pay_loan_button %}
         <button
           type="button"
@@ -83,8 +84,8 @@
           Loan Type: {{loan.get_loan_type_display}}
         </h6>
         <p class="card-text">
-          <b>Bank</b>: {{loan.branch.bank}} <br />
-          <b>Bank Branch</b>: {{loan.branch}} <br />
+          <b>Bank Branch</b>: {{loan.branch}} <br /><b>Taken At</b>:
+          {{loan.created_at}} <br />
           <b>Due Date</b>:
           <span style="color: red; font-weight: bold">{{loan.due_at}}</span>
           <br />
@@ -103,8 +104,8 @@
           Loan Type: {{loan.get_loan_type_display}}
         </h6>
         <p class="card-text">
-          <b>Bank</b>: {{loan.branch.bank}} <br />
-          <b>Bank Branch</b>: {{loan.branch}} <br />
+          <b>Bank Branch</b>: {{loan.branch}} <br /><b>Taken At</b>:
+          {{loan.created_at}} <br /><b>Paid At</b>: {{loan.paid_at}} <br />
         </p>
       </div>
     </div>

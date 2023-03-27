@@ -1,0 +1,19 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row justify-content-center mt-2">
+  <div class="col col-md-8">
+    <h1>Branches</h1>
+    {% for branch in branches %}
+    <div class="card mt-2">
+      <div class="card-body">
+        <h5 class="card-title">{{branch.name}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{branch.code}}</h6>
+        <p class="card-text">{{branch.address}}</p>
+        <a href="{% url 'branch-detail' branch.id %}" class="card-link"
+          >View Branch Details</a
+        >
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

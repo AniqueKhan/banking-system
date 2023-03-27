@@ -6,19 +6,31 @@
       <div class="card-body">
         <h5 class="card-title">Account Name: {{profile.account_name}}</h5>
         <h6 class="card-subtitle mb-2 text-muted">
-          PAN Number: {{profile.account_number}}
+          PAN Number: {{profile.pan_number}}
         </h6>
         <h6 class="card-subtitle mb-2 text-muted">
           Account Type: {{account.get_account_type_display}}
         </h6>
         <p class="card-text">
           <!-- prettier-ignore -->
-          {% if profile.phone %} <b>Phone</b>: {{profile.phone}}
+          {% if profile.phone %} <b>Phone</b> : {{profile.phone}}
           <br /><!-- prettier-ignore -->{% endif %} {% if profile.address %}
-          <b>Address</b>: {{profile.address}} <br />{% endif %}
+          <b>Address</b> : {{profile.address}} <br />{% endif %}
 
-          <b>Balance</b>: {{account.balance}}$ <br />
-          <b>Bank Branch</b>: {{account.branch}} <br />
+          <b>Balance</b> : {{account.balance}}$ <br />
+          <b>Bank Branch</b> : {{account.branch}} <br />
+          <b>Gender</b> : {{user.get_gender_display}} <br />
+          <b>Education</b> : {{user.get_education_display}} <br />
+          <b>Dependents</b> : {{user.get_dependents_display}} <br />
+          <b>Self-Employed</b> : {{user.get_self_employed_display}} <br />
+          <b>Married</b> : {{user.get_married_display}} <br />
+          <b>Property Area</b> : {{user.get_property_area_display}} <br />
+          <b>Income</b> : {{user.applicant_income}} <br />
+
+          {% if user.co_applicant_income %}
+
+          <b>Co-Applicant Income</b> : {{user.co_applicant_income}}
+          <br /><!-- prettier-ignore -->{% endif %}
         </p>
         <button
           type="button"

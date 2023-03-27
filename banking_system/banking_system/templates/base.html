@@ -50,17 +50,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-1 mb-lg-0">
             <li class="nav-item mr-4">
-              <a class="nav-link" href="#"
-                ><i class="fa-solid fa-building-columns"></i> Banks</a
+              <a class="nav-link" href="{% url 'branches' %}"
+                ><i class="fa-solid fa-building-columns"></i> Branches</a
               >
             </li>
             <li class="nav-item mr-4">
-              <a class="nav-link" href="#"
+              <a class="nav-link" href="{% url 'loans' %}"
                 ><i class="fa-solid fa-money-bill-transfer"></i>My Loans</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link mr-4" href="#"
+              <a class="nav-link mr-4" href="{% url 'notifications' %}"
                 ><i class="fa-solid fa-bell"></i> Notifications
                 <!-- prettier-ignore -->
                 {% if count_notifications %}
@@ -71,11 +71,11 @@
             </li>
             <li class="nav-item">
               <a class="nav-link mr-4" href="#"
-                ><i class="fa-solid fa-bell"></i> Request A Loan
+                ><i class="fa-solid fa-wallet"></i> Request A Loan
               </a>
             </li>
             <li class="nav-item mr-4">
-              <a class="nav-link" href="#"
+              <a class="nav-link" href="{% url 'my-profile' %}"
                 ><i class="fa fa-user"></i> My
                 Profile({{request.user.account_name}})</a
               >
