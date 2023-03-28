@@ -68,7 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                "bank_management.views.count_notifications",
+                # "bank_management.views.count_notifications",
             ],
         },
     },
@@ -133,7 +133,7 @@ STATICFILES_DIRS = [
 # Login
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
-LOGIN_URL = '/login'
+LOGIN_URL = 'authentication/login'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

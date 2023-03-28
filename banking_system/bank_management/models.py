@@ -2,6 +2,7 @@ from django.db import models
 from app_authentication.models import User
 from django.db.models.signals import post_save
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 # Create your models here.
 class Branch(models.Model):
@@ -16,7 +17,6 @@ class Branch(models.Model):
         return self.name
 
 LOAN_TYPES = (('personal', 'Personal Loan'),('home', 'Home Loan'),('auto', 'Auto Loan'),('student', 'Student Loan'),('business', 'Business Loan'),('line_of_credit', 'Line of Credit'),)
-LOAN_STATUS = (('pending', 'Pending'),('approved', 'Approved'),('rejected', 'Rejected'),)
 
 class Loan(models.Model):
     loan_type = models.CharField(max_length=15, choices=LOAN_TYPES)
@@ -28,12 +28,13 @@ class Loan(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     due_at = models.DateTimeField()
     paid_at = models.DateTimeField(blank=True,null=True)
-    loan_status = models.CharField(max_length=15, choices=LOAN_STATUS,default=LOAN_STATUS[0])
+    loan_status = models.CharField(max_length=15,blank=True,null=True)
 
-
+    def __str__(self):
+        return f"Loan for {self.availed_by} of amount {self.amount}"
     def get_loan_amount_term(self):
-        if self.paid_at:
-            return self.created_at - self.paid_at
+        if self.paid_at and self.paid:
+            return (self.paid_at - self.created_at).days
         return None
 
     def get_pay_loan_button(self):
@@ -44,6 +45,32 @@ class Loan(models.Model):
             return account.balance >= total_amount
         
         return False
+    
+    def update_loan_status(self):
+        user = self.availed_by
+        account = Account.objects.filter(hold_by=self.availed_by).first()
+        total_amount = self.amount + (self.amount * self.interest_rate / 100)
+        user_pending_loans =  Loan.objects.filter(due_at__gte=timezone.now(),availed_by=user,paid=False)
+        user_due_loans =  Loan.objects.filter(due_at__lte=timezone.now(),availed_by=user,paid=False)
+
+        # The factors considered for approving the loans for the machine learning testing part are , 
+        # 1 ) The account balance must be greater than the loan amount with interest
+        # 2 ) The user must be self.employed and graduated
+        # 3 ) The user must have zero due loans and less than two pending loans
+        # 4 ) The dependents on the users must be 3 or less and his/her income should be greater than 40000
+
+        if (account.balance >= total_amount and 
+            user.self_employed and user.applicant_income >= 40000 and 
+            user.dependents <=3 and len(user_due_loans) == 0 and
+            len(user_pending_loans) <= 10 and user.education == "graduated"):
+            self.loan_status = "Approved" # Approved
+        else:
+            self.loan_status = "Rejected" # Rejected
+    def save(self, *args, **kwargs):
+        self.update_loan_status()
+        super().save(*args, **kwargs)
+        
+    
 
 
 

@@ -19,6 +19,12 @@
           <b>Bank Branch</b>: {{loan.branch}} <br /><b>Taken At</b>:
           {{loan.created_at}} <br />
           <b>Due Date</b>: {{loan.due_at}} <br />
+
+          {% if loan.get_loan_amount_term %}
+
+          <b>Loan Amount Term</b>: {{loan.get_loan_amount_term}} <br />
+
+          {% endif %}
         </p>
         {% if loan.get_pay_loan_button %}
         <button
@@ -105,7 +111,10 @@
         </h6>
         <p class="card-text">
           <b>Bank Branch</b>: {{loan.branch}} <br /><b>Taken At</b>:
-          {{loan.created_at}} <br /><b>Paid At</b>: {{loan.paid_at}} <br />
+          {{loan.created_at}} <br /><b>Paid At</b>: {{loan.paid_at}}
+          <br />
+          <b>Loan Amount Term</b>: {{loan.get_loan_amount_term}} (days) <br />
+          <b>Loan Status</b>: {{loan.loan_status}} <br />
         </p>
       </div>
     </div>

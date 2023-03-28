@@ -85,3 +85,21 @@ def login_view(request):
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
+# def login_view(request):
+#     if request.user.is_authenticated:
+#         return redirect("index")
+#     if request.method=="POST":
+#         account_name = request.POST.get("account_name")
+#         pan_number = request.POST.get("pan_number")
+#         password = request.POST.get("password")
+#         user = authenticate(request,account_name=account_name,pan_number=pan_number,password=password)
+#         if user is not None:
+#             login(request, user)
+#             return redirect("core:home")
+#         else:
+#             context = {
+#                 "error":"Invalid Credentials"
+#             }
+#             return render(request, "login.html",context)
+#     else:
+#         return render(request, "login.html")
