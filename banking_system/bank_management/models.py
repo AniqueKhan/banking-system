@@ -29,9 +29,18 @@ class Loan(models.Model):
     due_at = models.DateTimeField()
     paid_at = models.DateTimeField(blank=True,null=True)
     loan_status = models.CharField(max_length=15,blank=True,null=True)
+    done = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Loan for {self.availed_by} of amount {self.amount}"
+
+    def get_credit_history(self):
+        user = self.availed_by
+        user_due_loans = Loan.objects.filter(due_at__lte=timezone.now(),availed_by=user,paid=False)
+        if len(user_due_loans)==0:
+            return 1
+        return 0
+        
     def get_loan_amount_term(self):
         if self.paid_at and self.paid:
             return (self.paid_at - self.created_at).days
