@@ -15,12 +15,16 @@
               {{form.account_name|add_class:'form-control form-control-sm'}}
             </div>
             <div class="form-group">
-              <label class="form-label">Account Name:</label>
-              {{form.account_number|add_class:'form-control form-control-sm'}}
+              <label class="form-label">Pan Number:</label>
+              {{form.pan_number|add_class:'form-control form-control-sm'}}
             </div>
             <div class="form-group">
-              <label class="form-label">Account Name:</label>
+              <label class="form-label">Loan Amount:</label>
               {{form.loan_amount|add_class:'form-control form-control-sm'}}
+            </div>
+            <div class="form-group">
+              <label class="form-label">Loan Amount Term (in days):</label>
+              {{form.loan_amount_term|add_class:'form-control form-control-sm'}}
             </div>
             <button type="submit" class="btn btn-primary btn-block mt-3">
               Submit

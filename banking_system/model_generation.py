@@ -17,7 +17,6 @@ n_cols = train_data[["Coapplicant_Income", "Loan_Amount_Term"]]
 for i in n_cols: 
     train_data[i].fillna(train_data[i].mean(axis=0), inplace=True)
 
-
 ord_enc = OrdinalEncoder()
 train_data[["Gender",'Married','Education','Self_Employed','Property_Area','Loan_Status']] = ord_enc.fit_transform(train_data[["Gender",'Married','Education','Self_Employed','Property_Area','Loan_Status']])
 train_data[["Gender",'Married','Education','Self_Employed','Property_Area','Loan_Status']] = train_data[["Gender",'Married','Education','Self_Employed','Property_Area','Loan_Status']].astype('int')
@@ -44,6 +43,6 @@ ds.fit(X_train, y_train)
 pred4 =ds.predict(X_test) 
 loss(y_test, pred4)
 
-joblib.dump(ds, "model.pkl") 
+joblib.dump(ds, "model2.pkl") 
 
 
