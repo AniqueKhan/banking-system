@@ -29,7 +29,7 @@ class Loan(models.Model):
     due_at = models.DateTimeField()
     paid_at = models.DateTimeField(blank=True,null=True)
     loan_status = models.CharField(max_length=15,blank=True,null=True)
-    done = models.BooleanField(default=False)
+    credited = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Loan for {self.availed_by} of amount {self.amount}"
@@ -42,9 +42,7 @@ class Loan(models.Model):
         return 0
         
     def get_loan_amount_term(self):
-        if self.paid_at and self.paid:
-            return (self.paid_at - self.created_at).days
-        return None
+        return (self.due_at - self.created_at).days
 
     def get_pay_loan_button(self):
         account = Account.objects.filter(hold_by=self.availed_by).first()
@@ -71,13 +69,23 @@ class Loan(models.Model):
         if (account.balance >= total_amount and 
             user.self_employed and user.applicant_income >= 40000 and 
             user.dependents <=3 and len(user_due_loans) == 0 and
-            len(user_pending_loans) <= 10 and user.education == "graduated"):
+            len(user_pending_loans) <= 50 and user.education == "graduated"):
             self.loan_status = "Approved" # Approved
         else:
             self.loan_status = "Rejected" # Rejected
+        
+
     def save(self, *args, **kwargs):
-        self.update_loan_status()
+        if self.loan_status=="Approved" and not self.credited:
+            account = Account.objects.filter(hold_by=self.availed_by)[0]
+            account.balance+=self.amount
+            account.save()
+            self.credited=True
         super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.due_at<=self.created_at:
+            raise ValidationError("Due Date must be greater than created date")
         
     
 
@@ -134,6 +142,10 @@ def create_notification_on_loan_creation(sender, instance, created, **kwargs):
         loan = instance
         user = loan.availed_by
         message = f"You took a loan of amount ${loan.amount} from {loan.branch}. The due date is {loan.due_at.date()}."
+        
+        if loan.loan_status=="Rejected":
+            message=f"Whoops! Your request for a loan of amount ${loan.amount} from {loan.branch} was rejected."
+        
         Notification.objects.create(loan=loan, user=user, message=message)
 post_save.connect(create_notification_on_loan_creation, sender=Loan)
 

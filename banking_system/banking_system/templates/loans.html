@@ -1,7 +1,8 @@
 {% extends 'base.html' %} {% block content %}
 <div class="row justify-content-center mt-2">
   <div class="col col-md-8">
-    {% if not pending_loans and not due_loans and not paid_loans %}
+    <!-- prettier-ignore -->
+    {% if not pending_loans and not due_loans and not paid_loans and not rejected_loans %}
     <h1 class="mt-4">You dont have any loans as of now</h1>
     {% else %}
     <h1>My Loans</h1>
@@ -18,7 +19,8 @@
         <p class="card-text">
           <b>Bank Branch</b>: {{loan.branch}} <br /><b>Taken At</b>:
           {{loan.created_at}} <br />
-          <b>Due Date</b>: {{loan.due_at}} <br />
+          <b>Due Date</b>: {{loan.due_at}} <br /><b>Loan Status</b>:
+          {{loan.loan_status}} <br />
 
           {% if loan.get_loan_amount_term %}
 
@@ -93,7 +95,8 @@
           <b>Bank Branch</b>: {{loan.branch}} <br /><b>Taken At</b>:
           {{loan.created_at}} <br />
           <b>Due Date</b>:
-          <span style="color: red; font-weight: bold">{{loan.due_at}}</span>
+          <span style="color: red; font-weight: bold">{{loan.due_at}}</span
+          ><b>Loan Status</b>: {{loan.loan_status}} <br />
           <br />
         </p>
       </div>
@@ -114,6 +117,24 @@
           {{loan.created_at}} <br /><b>Paid At</b>: {{loan.paid_at}}
           <br />
           <b>Loan Amount Term</b>: {{loan.get_loan_amount_term}} (days) <br />
+          <b>Loan Status</b>: {{loan.loan_status}} <br />
+        </p>
+      </div>
+    </div>
+    {% endfor %} {% endif %} {% if rejected_loans %}
+    <h4 class="mt-2">Rejected Loans</h4>
+    {% for loan in rejected_loans %}
+
+    <div class="card mt-2">
+      <div class="card-body">
+        <h5 class="card-title">Amount: {{loan.amount}}$</h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+          Loan Type: {{loan.get_loan_type_display}}
+        </h6>
+        <p class="card-text">
+          <b>Bank Branch</b>: {{loan.branch}} <br /><b>Taken At</b>:
+          {{loan.created_at}}
+          <br />
           <b>Loan Status</b>: {{loan.loan_status}} <br />
         </p>
       </div>

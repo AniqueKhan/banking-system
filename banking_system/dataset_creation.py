@@ -30,3 +30,4 @@ for loan in loans:
 
 df = pd.DataFrame(data)
 df.to_csv("dataset.csv",index=False)
+print(df.shape)

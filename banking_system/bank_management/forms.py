@@ -1,12 +1,14 @@
 from django import forms
 from django.core.validators import MinValueValidator
 from app_authentication.models import User
+from bank_management.models import LOAN_TYPES
 
 class LoanRequestForm(forms.Form):
     account_name = forms.CharField(max_length=100)
     pan_number = forms.CharField(max_length=100)
     loan_amount = forms.IntegerField()
     loan_amount_term = forms.IntegerField()
+    loan_type = forms.ChoiceField(choices=LOAN_TYPES,initial=LOAN_TYPES[0])
 
     def clean(self):
         cleaned_data = super().clean()
