@@ -141,10 +141,10 @@ def create_notification_on_loan_creation(sender, instance, created, **kwargs):
     if created:
         loan = instance
         user = loan.availed_by
-        message = f"You took a loan of amount ${loan.amount} from {loan.branch}. The due date is {loan.due_at.date()}."
+        message = f"You took a loan of amount \u20B9{loan.amount} from {loan.branch}. The due date is {loan.due_at.date()}."
         
         if loan.loan_status=="Rejected":
-            message=f"Whoops! Your request for a loan of amount ${loan.amount} from {loan.branch} was rejected."
+            message=f"Whoops! Your request for a loan of amount \u20B9{loan.amount} from {loan.branch} was rejected."
         
         Notification.objects.create(loan=loan, user=user, message=message)
 post_save.connect(create_notification_on_loan_creation, sender=Loan)
@@ -153,6 +153,6 @@ def create_notification_on_loan_payment(sender,instance,created,**kwargs):
     loan = instance
     if not created and loan.paid:
         user = loan.availed_by
-        message = f"Your loan of ${loan.amount} from {loan.branch} has been paid off!"
+        message = f"Your loan of \u20B9{loan.amount} from {loan.branch} has been paid off!"
         Notification.objects.create(loan=loan,user=user,message=message)
 post_save.connect(create_notification_on_loan_payment, sender=Loan)

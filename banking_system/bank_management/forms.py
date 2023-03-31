@@ -22,3 +22,9 @@ class LoanRequestForm(forms.Form):
             raise forms.ValidationError('Invalid account name or pan number')
 
         return cleaned_data
+
+    def clean_loan_amount(self):
+        loan_amount = self.cleaned_data.get('loan_amount')
+        if loan_amount > 99999999:
+            raise forms.ValidationError('Loan amount cannot be greater than 99999999')
+        return loan_amount

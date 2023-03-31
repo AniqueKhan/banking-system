@@ -17,7 +17,7 @@
           <br /><!-- prettier-ignore -->{% endif %} {% if profile.address %}
           <b>Address</b> : {{profile.address}} <br />{% endif %}
 
-          <b>Balance</b> : {{account.balance}}$ <br />
+          <b>Balance</b> : {{account.balance}}&#8377; <br />
           <b>Bank Branch</b> : {{account.branch}} <br />
           <b>Gender</b> : {{user.get_gender_display}} <br />
           <b>Education</b> : {{user.get_education_display}} <br />
@@ -25,11 +25,11 @@
           <b>Self-Employed</b> : {{user.get_self_employed_display}} <br />
           <b>Married</b> : {{user.get_married_display}} <br />
           <b>Property Area</b> : {{user.get_property_area_display}} <br />
-          <b>Income</b> : {{user.applicant_income}}$ <br />
+          <b>Income</b> : {{user.applicant_income}}&#8377; <br />
 
           {% if user.co_applicant_income %}
 
-          <b>Co-Applicant Income</b> : {{user.co_applicant_income}}$
+          <b>Co-Applicant Income</b> : {{user.co_applicant_income}}&#8377;
           <br /><!-- prettier-ignore -->{% endif %}
         </p>
         <button
