@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% comment %}
 <div class="row mt-2 justify-content-center">
   {% endcomment %}
-  <div class="row mt-2">
+  <div class="row mt-2" style="width: 100%">
     <div class="col">
       {% comment %}
       <div class="col col-md-8">
@@ -10,7 +10,12 @@
         {% if not transactions_received and not transactions_sent %}
         <h1 class="mt-2">You dont have any transactions as of yet!</h1>
         {% endif %} {% if transactions_sent %}
-        <h1>Debited</h1>
+        <h1
+          class="alert alert-primary"
+          style="margin-right: 150px; margin-left: 150px"
+        >
+          Debited
+        </h1>
         {% for transaction in transactions_sent %} {% comment %}
         <div class="card mt-2">
           <div class="card-body">
@@ -37,6 +42,8 @@
             border: 1px solid #dee2e6;
             border-radius: 0.95rem;
             box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
+            margin-right: 150px;
+            margin-left: 150px;
           "
         >
           <div class="card-body">
@@ -60,8 +67,13 @@
           </div>
         </div>
         {% endfor %} {% endif %} {% if transactions_received %}
-        <h1 class="mt-2">Credited</h1>
-        {% for transaction in transactions_received %}
+        <h1
+          class="mt-4 alert alert-primary"
+          style="margin-right: 150px; margin-left: 150px"
+        >
+          Credited
+        </h1>
+        {% for transaction in transactions_received %} {% comment %}
         <div class="card mt-2">
           <div class="card-body">
             <h5 class="card-title">Amount: {{transaction.amount}}&#8377;</h5>
@@ -78,14 +90,17 @@
             </p>
           </div>
         </div>
-        {% comment %}
+        {% endcomment %}
         <div
           class="card mt-2"
           style="
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 0.95rem;
+
             box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
+            margin-right: 150px;
+            margin-left: 150px;
           "
         >
           <div class="card-body">
@@ -108,9 +123,9 @@
             </p>
           </div>
         </div>
-        {% endcomment %} {% endfor %} {% endif %}
+        {% endfor %} {% endif %}
       </div>
     </div>
-    {% endblock content %}
   </div>
 </div>
+{% endblock content %}

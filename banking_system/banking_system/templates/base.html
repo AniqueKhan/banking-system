@@ -42,7 +42,14 @@
         <li><a href="{% url 'branches' %}">Branches</a></li>
         <li><a href="{% url 'loans' %}">Loans</a></li>
         <li><a href="{% url 'loan-request' %}">Request Loan</a></li>
-        <li><a href="{% url 'notifications' %}">Notifications</a></li>
+        <li>
+          <a href="{% url 'notifications' %}"
+            >Notifications{% if count_notifications %}
+            <span class="badge rounded-pill bg-danger"
+              >{{count_notifications}}</span
+            >{% endif %}</a
+          >
+        </li>
         <li><a href="{% url 'my-profile' %}">Profile</a></li>
         <li><a href="{% url 'logout' %}">Logout</a></li>
       </ul>

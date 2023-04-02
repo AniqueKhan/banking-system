@@ -177,5 +177,5 @@ def loan_request(request):
 
     else:
         form = LoanRequestForm()
-    # return render(request,"loan-request.html",{"form":form})
-    return render(request,"1.html",{"form":form})
+    return render(request,"loan-request.html",{"form":form})
+    # return render(request,"1.html",{"form":form})
