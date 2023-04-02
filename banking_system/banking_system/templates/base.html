@@ -25,11 +25,29 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" type="text/css" href="{% static 'navbar.css' %}" />
     {% block css_sheet %} {% endblock css_sheet %}
 
     <title>Banking System</title>
   </head>
   <body style="background-color: #e1e9f5">
+    <nav>
+      <input type="checkbox" id="check" />
+      <label for="check" class="checkbtn">
+        <i class="fas fa-bars"></i>
+      </label>
+      <label class="logo">Banking System</label>
+      <ul>
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'branches' %}">Branches</a></li>
+        <li><a href="{% url 'loans' %}">Loans</a></li>
+        <li><a href="{% url 'loan-request' %}">Request Loan</a></li>
+        <li><a href="{% url 'notifications' %}">Notifications</a></li>
+        <li><a href="{% url 'my-profile' %}">Profile</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+    </nav>
+    {% comment %}
     <nav
       class="navbar navbar-expand-lg navbar-light"
       style="background-color: #76b6db"
@@ -97,6 +115,7 @@
         </div>
       </div>
     </nav>
+    {% endcomment %}
     <!-- prettier-ignore-->
     {% block content %}  {% endblock content %}
     <script

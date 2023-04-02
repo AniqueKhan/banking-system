@@ -1,47 +1,116 @@
-{% extends 'base.html' %} {% block content %}
-<div class="row justify-content-center mt-2">
-  <div class="col col-md-8">
-    {% if not transactions_received and not transactions_sent %}
-    <h1 class="mt-2">You dont have any transactions as of yet!</h1>
-    {% endif %} {% if transactions_sent %}
-    <h1>Debited</h1>
-    {% for transaction in transactions_sent %}
-    <div class="card mt-2">
-      <div class="card-body">
-        <h5 class="card-title">Amount: {{transaction.amount}}&#8377;</h5>
-        <h6 class="card-subtitle mb-2 text-muted">
-          Transaction Type: {{transaction.transaction_type}}
-        </h6>
-        <p class="card-text">
-          <b>Bank Branch</b>: {{transaction.branch}} <br />
-          <b>Sent To</b>: {{transaction.sent_to}} <br />
-          <b>Sent At:</b> {{transaction.timestamp}} <br />
+{% extends 'base.html' %} {% load static %} {% block content %} {% comment %}
+<div class="row mt-2 justify-content-center">
+  {% endcomment %}
+  <div class="row mt-2">
+    <div class="col">
+      {% comment %}
+      <div class="col col-md-8">
+        {% endcomment %}
+        <!-- prettier-ignore -->
+        {% if not transactions_received and not transactions_sent %}
+        <h1 class="mt-2">You dont have any transactions as of yet!</h1>
+        {% endif %} {% if transactions_sent %}
+        <h1>Debited</h1>
+        {% for transaction in transactions_sent %} {% comment %}
+        <div class="card mt-2">
+          <div class="card-body">
+            <h5 class="card-title">Amount: {{transaction.amount}}&#8377;</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Transaction Type: {{transaction.transaction_type}}
+            </h6>
+            <p class="card-text">
+              <b>Bank Branch</b>: {{transaction.branch}} <br />
+              <b>Sent To</b>: {{transaction.sent_to}} <br />
+              <b>Sent At:</b> {{transaction.timestamp}} <br />
 
-          {% if transaction.description %}
-          <b>Description:</b> {{transaction.description}} {% endif %}
-        </p>
+              {% if transaction.description %}
+              <b>Description:</b> {{transaction.description}} {% endif %}
+            </p>
+          </div>
+        </div>
+        {% endcomment %}
+
+        <div
+          class="card mt-2"
+          style="
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.95rem;
+            box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
+          "
+        >
+          <div class="card-body">
+            <h5
+              class="card-title"
+              style="color: #007bff; font-size: 1.25rem; font-weight: bold"
+            >
+              Amount: {{transaction.amount}}&#8377;
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Transaction Type: {{transaction.transaction_type}}
+            </h6>
+            <p class="card-text">
+              <b>Bank Branch</b>: {{transaction.branch}} <br />
+              <b>Sent To</b>: {{transaction.sent_to}} <br />
+              <b>Sent At:</b> {{transaction.timestamp}} <br />
+
+              {% if transaction.description %}
+              <b>Description:</b> {{transaction.description}} {% endif %}
+            </p>
+          </div>
+        </div>
+        {% endfor %} {% endif %} {% if transactions_received %}
+        <h1 class="mt-2">Credited</h1>
+        {% for transaction in transactions_received %}
+        <div class="card mt-2">
+          <div class="card-body">
+            <h5 class="card-title">Amount: {{transaction.amount}}&#8377;</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Transaction Type: {{transaction.transaction_type}}
+            </h6>
+            <p class="card-text">
+              <b>Bank Branch</b>: {{transaction.branch}} <br />
+              <b>Sent By</b>: {{transaction.sent_by}} <br />
+              <b>Received At:</b> {{transaction.timestamp}} <br />
+
+              {% if transaction.description %}
+              <b>Description:</b> {{transaction.description}} {% endif %}
+            </p>
+          </div>
+        </div>
+        {% comment %}
+        <div
+          class="card mt-2"
+          style="
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.95rem;
+            box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
+          "
+        >
+          <div class="card-body">
+            <h5
+              class="card-title"
+              style="color: #007bff; font-size: 1.25rem; font-weight: bold"
+            >
+              Amount: {{transaction.amount}}&#8377;
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Transaction Type: {{transaction.transaction_type}}
+            </h6>
+            <p class="card-text">
+              <b>Bank Branch</b>: {{transaction.branch}} <br />
+              <b>Sent By</b>: {{transaction.sent_by}} <br />
+              <b>Received At:</b> {{transaction.timestamp}} <br />
+
+              {% if transaction.description %}
+              <b>Description:</b> {{transaction.description}} {% endif %}
+            </p>
+          </div>
+        </div>
+        {% endcomment %} {% endfor %} {% endif %}
       </div>
     </div>
-    {% endfor %} {% endif %} {% if transactions_received %}
-    <h1 class="mt-2">Credited</h1>
-    {% for transaction in transactions_received %}
-    <div class="card mt-2">
-      <div class="card-body">
-        <h5 class="card-title">Amount: {{transaction.amount}}&#8377;</h5>
-        <h6 class="card-subtitle mb-2 text-muted">
-          Transaction Type: {{transaction.transaction_type}}
-        </h6>
-        <p class="card-text">
-          <b>Bank Branch</b>: {{transaction.branch}} <br />
-          <b>Sent By</b>: {{transaction.sent_by}} <br />
-          <b>Received At:</b> {{transaction.timestamp}} <br />
-
-          {% if transaction.description %}
-          <b>Description:</b> {{transaction.description}} {% endif %}
-        </p>
-      </div>
-    </div>
-    {% endfor %} {% endif %}
+    {% endblock content %}
   </div>
 </div>
-{% endblock content %}

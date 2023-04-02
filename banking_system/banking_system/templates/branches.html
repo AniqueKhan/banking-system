@@ -1,19 +1,50 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% block content %} {% comment %}
 <div class="row justify-content-center mt-2">
-  <div class="col col-md-8">
-    <h1>Branches</h1>
-    {% for branch in branches %}
-    <div class="card mt-2">
-      <div class="card-body">
-        <h5 class="card-title">{{branch.name}}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{branch.code}}</h6>
-        <p class="card-text">{{branch.address}}</p>
-        <a href="{% url 'branch-detail' branch.id %}" class="card-link"
-          >View Branch Details</a
+  {% endcomment %}
+  <div class="row mt-2">
+    <div class="col">
+      {% comment %}
+      <div class="col col-md-8">
+        {% endcomment %}
+        <h1>Branches</h1>
+        {% for branch in branches %} {% comment %}
+        <div class="card mt-2">
+          <div class="card-body">
+            <h5 class="card-title">{{branch.name}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{branch.code}}</h6>
+            <p class="card-text">{{branch.address}}</p>
+            <a href="{% url 'branch-detail' branch.id %}" class="card-link"
+              >View Branch Details</a
+            >
+          </div>
+        </div>
+        {% endcomment %}
+        <div
+          class="card mt-2"
+          style="
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.95rem;
+            box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
+          "
         >
+          <div class="card-body">
+            <h5
+              class="card-title"
+              style="color: #007bff; font-size: 1.25rem; font-weight: bold"
+            >
+              {{branch.name}}
+            </h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{branch.code}}</h6>
+            <p class="card-text">{{branch.address}}</p>
+            <a href="{% url 'branch-detail' branch.id %}" class="card-link"
+              >View Branch Details</a
+            >
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
-    {% endfor %}
+    {% endblock content %}
   </div>
 </div>
-{% endblock content %}
