@@ -9,8 +9,9 @@ from bank_management.forms import LoanRequestForm
 from sklearn.metrics import accuracy_score
 import numpy as np
 import warnings
-warnings.simplefilter(action='ignore', category=FutureWarning)
+import pandas as pd
 warnings.simplefilter(action='ignore', category=UserWarning)
+
 # Create your views here.
 
 @login_required
@@ -104,29 +105,31 @@ def delete_notification(request,notification_id):
     Notification.objects.filter(id=notification_id,user=request.user).delete()
     return redirect("notifications")
 
-def preprocessdata(Dependent,Applicant_Income,Coapplicant_Income,Loan_Amount,Loan_Amount_Term,
-                   Credit_History,Loan_Amount_Log,Gender, Married, Education, Self_Employed, Property_Area):
-    
-    Gender_Female, Gender_Male = (0, 1) if Gender == "Male" else (1, 0)
-    Married_No, Married_Yes = (0, 1) if Married == "Yes" else (1, 0)
-    Education_Not_Graduated, Education_Graduated = (0, 1) if Education == "Graduated" else (1, 0)
-    Self_Employed_No, Self_Employed_Yes = (0, 1) if Self_Employed == "Yes" else (1, 0)
-    Property_Area_Rural, Property_Area_Urban = (0, 1) if Property_Area == "Urban" else (1, 0)
+def preprocessdata(Dependents,ApplicantIncome,CoapplicantIncome,LoanAmount,Loan_Amount_Term,
+                   Credit_History,Gender, Married, Education, Self_Employed, Property_Area):
 
-    test_data = [[Dependent, Applicant_Income, Coapplicant_Income, Loan_Amount,
-       Loan_Amount_Term, Credit_History, Loan_Amount_Log,
-       Gender_Female, Gender_Male, Married_No, Married_Yes,
-       Education_Graduated, Education_Not_Graduated, Self_Employed_No,
-       Self_Employed_Yes, Property_Area_Rural, Property_Area_Urban]]
+    df = pd.DataFrame({
+        "Gender": 1 if Gender == "Male" else 0,
+        "Married": 1 if Married == "Yes" else 0,
+        "Dependents": Dependents,
+        "Education": 1 if Education == "Graduate" else 0,
+        "Self_Employed": 1 if Self_Employed == "Yes" else 0,
+        "ApplicantIncome":ApplicantIncome,
+        "CoapplicantIncome":CoapplicantIncome,
+        "LoanAmount":LoanAmount,
+        "Loan_Amount_Term":Loan_Amount_Term,
+        "Credit_History":Credit_History,
+        "Property_Area": 1 if Property_Area == "Urban" else 2 if Property_Area == "Semiurban" else 0
+    },index=[0])
 
 
-    print(Dependent, Applicant_Income, Coapplicant_Income, Loan_Amount,
-       Loan_Amount_Term, Credit_History, Loan_Amount_Log,
-       Gender_Female, Gender_Male, Married_No, Married_Yes,
-       Education_Graduated, Education_Not_Graduated, Self_Employed_No,
-       Self_Employed_Yes, Property_Area_Rural, Property_Area_Urban)
+    print(Dependents, ApplicantIncome, CoapplicantIncome, LoanAmount,
+       Loan_Amount_Term, Credit_History,
+       Gender, Married, Married,
+       Education,
+       Self_Employed, Property_Area)
 
-    return joblib.load("model.pkl").predict(test_data)
+    return joblib.load("model").predict(df)
 
 
 @login_required
@@ -150,28 +153,24 @@ def loan_request(request):
             # Getting Model Data
             Gender = user.get_gender_display() 
             Married = user.get_married_display()
-            Dependent = user.get_dependents_display()
+            Dependents = user.get_dependents_display()
             Education = user.get_education_display()  
             Self_Employed = user.get_self_employed_display() 
-            Applicant_Income = user.applicant_income
-            Coapplicant_Income = user.co_applicant_income if user.co_applicant_income else 0
-            Loan_Amount = form.cleaned_data['loan_amount']
-            Loan_Amount_Log = np.log(Loan_Amount)
+            ApplicantIncome = user.applicant_income
+            CoapplicantIncome = user.co_applicant_income if user.co_applicant_income else 0
+            LoanAmount = form.cleaned_data['loan_amount']
             Loan_Amount_Term = form.cleaned_data['loan_amount_term']
             Credit_History = 1 if len(user_due_loans)==0 else 0
             Property_Area = user.get_property_area_display()
-            print(Dependent,Applicant_Income,Coapplicant_Income,Loan_Amount,Loan_Amount_Term,
-                   Credit_History,Loan_Amount_Log,Gender, Married, Education, Self_Employed, Property_Area)
+            print(Dependents,ApplicantIncome,CoapplicantIncome,LoanAmount,Loan_Amount_Term,
+                   Credit_History,Gender, Married, Education, Self_Employed, Property_Area)
 
-            prediction = preprocessdata(Dependent=Dependent,Applicant_Income=Applicant_Income,
-                        Coapplicant_Income=Coapplicant_Income,Loan_Amount=Loan_Amount,
-                        Loan_Amount_Term=Loan_Amount_Term,Credit_History=Credit_History,
-                        Loan_Amount_Log=Loan_Amount_Log,Gender=Gender, Married=Married, Education=Education, 
-                        Self_Employed=Self_Employed, Property_Area=Property_Area)
-            approved = True if prediction == ['Approved'] else False 
+            prediction = preprocessdata(Dependents,ApplicantIncome,CoapplicantIncome,LoanAmount,Loan_Amount_Term,
+                   Credit_History,Gender, Married, Education, Self_Employed, Property_Area)
+            approved = True if prediction == 1 else False 
             bg_color = "9ff5b6" if approved else "f59f9f"
             
-            loan = Loan.objects.create(loan_type=loan_type,amount=Loan_Amount,paid=False,branch=account.branch,availed_by=user,interest_rate=10,loan_status=prediction[0],due_at=timezone.now()+timedelta(days=Loan_Amount_Term))
+            loan = Loan.objects.create(loan_type=loan_type,amount=LoanAmount,paid=False,branch=account.branch,availed_by=user,interest_rate=10,loan_status="Approved" if approved else "Rejected",due_at=timezone.now()+timedelta(days=Loan_Amount_Term))
                         
             return render(request,"loan-request-response.html",{"approved":approved,"loan":loan,"bg_color":bg_color})
 
@@ -179,3 +178,6 @@ def loan_request(request):
         form = LoanRequestForm()
     return render(request,"loan-request.html",{"form":form})
     # return render(request,"1.html",{"form":form})
+
+
+

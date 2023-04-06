@@ -20,9 +20,9 @@ class UserManager(BaseUserManager):
 
 SELF_EMPLOYED_MARRIAGE_CHOICES = [('yes', 'Yes'),('no', 'No'),]
 GENDER_CHOICES = [('male', 'Male'),('female', 'Female'),]
-PROPERTY_AREA_CHOICES = [('urban', 'Urban'),('rural', 'Rural'),]
+PROPERTY_AREA_CHOICES = [('urban', 'Urban'),('semi-urban', 'Semiurban'),('rural', 'Rural'),]
 DEPENDENTS_CHOICES = [(0, '0'),(1, '1'),(2, '2'),(3, '3'),(4, '4'),]
-EDUCATION_CHOICES = [('graduated', 'Graduated'),('not_graduated', 'Not Graduated'),]
+EDUCATION_CHOICES = [('graduated', 'Graduate'),('not_graduated', 'Not Graduate'),]
 
 class User(AbstractBaseUser, PermissionsMixin):
     account_name = models.CharField(max_length=30, unique=True)
@@ -42,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     education = models.CharField(max_length=13, choices=EDUCATION_CHOICES,default=EDUCATION_CHOICES[0])
     applicant_income = models.FloatField()
     co_applicant_income = models.FloatField(blank=True,null=True)
-    property_area = models.CharField(max_length=5,choices=PROPERTY_AREA_CHOICES,default=PROPERTY_AREA_CHOICES[0])
+    property_area = models.CharField(max_length=10,choices=PROPERTY_AREA_CHOICES,default=PROPERTY_AREA_CHOICES[0])
 
     USERNAME_FIELD = 'account_name'
     REQUIRED_FIELDS = ['pan_number',]
