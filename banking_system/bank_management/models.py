@@ -3,6 +3,8 @@ from app_authentication.models import User
 from django.db.models.signals import post_save
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Create your models here.
 class Branch(models.Model):
@@ -142,11 +144,17 @@ def create_notification_on_loan_creation(sender, instance, created, **kwargs):
         loan = instance
         user = loan.availed_by
         message = f"You took a loan of amount \u20B9{loan.amount} from {loan.branch}. The due date is {loan.due_at.date()}."
-        
+        email_subject="Loan Request Approved"
+
         if loan.loan_status=="Rejected":
             message=f"Whoops! Your request for a loan of amount \u20B9{loan.amount} from {loan.branch} was rejected."
+            email_subject="Loan Request Rejected"
         
         Notification.objects.create(loan=loan, user=user, message=message)
+
+        if user.email:
+            send_mail(subject=email_subject, message=message, from_email=settings.EMAIL_HOST_USER, recipient_list=[user.email])
+
 post_save.connect(create_notification_on_loan_creation, sender=Loan)
 
 def create_notification_on_loan_payment(sender,instance,created,**kwargs):
@@ -155,4 +163,7 @@ def create_notification_on_loan_payment(sender,instance,created,**kwargs):
         user = loan.availed_by
         message = f"Your loan of \u20B9{loan.amount} from {loan.branch} has been paid off!"
         Notification.objects.create(loan=loan,user=user,message=message)
+        if user.email:
+            email_subject = "Loan Payed Off!"
+            send_mail(subject=email_subject, message=message, from_email=settings.EMAIL_HOST_USER, recipient_list=[user.email])
 post_save.connect(create_notification_on_loan_payment, sender=Loan)

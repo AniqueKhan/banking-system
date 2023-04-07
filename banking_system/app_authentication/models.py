@@ -43,7 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     applicant_income = models.FloatField()
     co_applicant_income = models.FloatField(blank=True,null=True)
     property_area = models.CharField(max_length=10,choices=PROPERTY_AREA_CHOICES,default=PROPERTY_AREA_CHOICES[0])
-
+    email = models.EmailField(blank=True,null=True)
+    
     USERNAME_FIELD = 'account_name'
     REQUIRED_FIELDS = ['pan_number',]
 
