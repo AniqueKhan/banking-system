@@ -57,6 +57,10 @@ signup.html {% load static widget_tweaks %}
               {{form.phone|add_class:'form-control form-control-sm'}}
             </div>
             <div class="form-group">
+              <label class="form-label">Email:</label>
+              {{form.email|add_class:'form-control form-control-sm'}}
+            </div>
+            <div class="form-group">
               <label class="form-label">Address:</label>
               {{form.address|add_class:'form-control form-control-sm'}}
             </div>

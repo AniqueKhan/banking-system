@@ -43,6 +43,7 @@ class SignupForm(forms.Form):
     phone_validator = RegexValidator(phone_regex,'Phone number must be entered in the format: +999999999. Up to 15 digits allowed.','invalid')
     phone = forms.CharField(validators=[phone_validator],max_length=17,required=False)
 
+    email = forms.EmailField()
     address = forms.CharField(max_length=100,required=False)
     account_type = forms.ChoiceField(choices=ACCOUNT_TYPES)
     balance = forms.DecimalField(max_digits=10, decimal_places=2,required=False)
