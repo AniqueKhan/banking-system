@@ -25,7 +25,7 @@ def signup(request):
             dependents = form.cleaned_data.get('dependents')
             education = form.cleaned_data.get('education')
             password = form.cleaned_data.get('password')
-            email = form.cleaned_data.get('password')
+            email = form.cleaned_data.get('email')
 
             # User Creation
             user = User.objects.create_user(
